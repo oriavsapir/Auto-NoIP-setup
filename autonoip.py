@@ -87,12 +87,13 @@ def create_subdomain(email_input, password_input, hostname, ip_address ,show_bro
 
     while "That name is already taken" in source:
         print("[*] That name is already taken")
-        new_name = input("[*] Insert a new name for the domain:\n")
-        while new_name or not 2 < len(new_name) < 19:
+        new_name = input("[*] Insert a new name for the domain:\n") or "a"
+        while not 2 < len(new_name) < 19:
             print("Subdomain name must be at least 2 characters long. Please try again.")
             new_name = input("[*] Insert subdomain name: \n")
 
         source = choose_domain(driver, new_name, ip_address )
+
     print("[*] The task has been completed successfully.")
     print(f"[*] Your domain name is: {hostname}.ddns.net")
 
