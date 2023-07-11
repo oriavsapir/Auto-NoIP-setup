@@ -34,6 +34,30 @@ def sign_in(username, password, show_browser):
     # Close the WebDriver
     driver.quit()
 
+def choose_domain(driver, hostname, ip_address):
+    driver.get("https://my.noip.com/dynamic-dns")
+
+    button = driver.find_element(By.XPATH, "//button[contains(text(), 'Create Hostname')]")
+    # Click on the button
+    button.click()
+    time.sleep(1)
+    # Fill in the form fields
+    hostname_input = driver.find_element(By.ID, "name")
+    ipv4_address_input = driver.find_element(By.NAME, "target")
+
+    hostname_input.send_keys(hostname)
+    ipv4_address_input.send_keys(ip_address)
+    # TODO: fix choose domain.
+    # wait = WebDriverWait(driver, 10)
+    # dropdown = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "chosen-single")))
+    # dropdown.click()
+    # webdriver.ActionChains(driver).send_keys("ddnsking.com").perform()
+    # time.sleep(1)
+    webdriver.ActionChains(driver).send_keys(Keys.ENTER).perform()
+    time.sleep(2)
+    element = driver.find_element(By.ID, "app")
+    source = element.get_attribute("outerHTML")
+    return source
 
 def create_subdomain(email_input, password_input, hostname, ip_address ,show_browser):
     if show_browser:
@@ -59,25 +83,18 @@ def create_subdomain(email_input, password_input, hostname, ip_address ,show_bro
     time.sleep(3)
     webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
     # Wait for the dynamic DNS page to load
-    driver.get("https://my.noip.com/dynamic-dns")
+    source = choose_domain( driver, hostname, ip_address)
 
-    button = driver.find_element(By.XPATH, "//button[contains(text(), 'Create Hostname')]")
-    # Click on the button
-    button.click()
-    time.sleep(1)
-    # Fill in the form fields
-    hostname_input = driver.find_element(By.ID, "name")
-    ipv4_address_input = driver.find_element(By.NAME, "target")
+    while "That name is already taken" in source:
+        print("[*] That name is already taken")
+        new_name = input("[*] Insert a new name for the domain:\n")
+        while new_name or not 2 < len(new_name) < 19:
+            print("Subdomain name must be at least 2 characters long. Please try again.")
+            new_name = input("[*] Insert subdomain name: \n")
 
-    hostname_input.send_keys(hostname)
-    ipv4_address_input.send_keys(ip_address)
-    # TODO: fix choose domain.
-    # wait = WebDriverWait(driver, 10)
-    # dropdown = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "chosen-single")))
-    # dropdown.click()
-    # webdriver.ActionChains(driver).send_keys("ddnsking.com").perform()
-    # time.sleep(1)
-    webdriver.ActionChains(driver).send_keys(Keys.ENTER).perform()
+        source = choose_domain(driver, new_name, ip_address )
+
+    time.sleep(1000)
     print("[*] The task has been completed successfully.")
     print(f"[*] Your domain name is: {hostname}.ddns.net")
 
