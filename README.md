@@ -28,8 +28,27 @@ The script performs the following steps:
 
 1. Clone the repository: `git clone https://github.com/oriavsapir/Auto-NoIP-setup.git`
 2. Install the required dependencies.
-3. Run the program: `python autonoip.py`
-   
+3. Run the program: ```python autonoip.py``` and nsert the input one by one.
+   or you can input with args:    
+   example:  
+   ```
+   python autonoip.py --password mypassword123 --IP 192.168.0.1 --subdomain example
+   ```
+<pre>
+python test1.py --help                                                           
+usage: test1.py [-h] [-p PASSWORD] [--IP IP] [-sb SUBDOMAIN] [--show-browser]  
+  
+options:  
+  -h, --help                            | show this help message and exit  
+  -p PASSWORD, --password PASSWORD      | password for No-IP account (at least 6 characters)  
+  --IP IP                               | IP address.
+  -sb SUBDOMAIN, --subdomain SUBDOMAIN  | subdomain name for your new domain  (up to 19 characters)    
+  --show-browser                        | show browser    
+</pre>
+
+### note:
+Every 30 days, you need to log in to this account and "activate" this script. Otherwise, the domain will be deactivated.  
+So keep your Creds.
 # Disclaimer:
 
 This tool is provided "as is" without any warranty. I do not assume any responsibility or liability for the usage of this tool or any consequences resulting from its use. It is your sole responsibility to ensure that your use of this tool complies with the terms and conditions of the website you are automating.
