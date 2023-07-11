@@ -93,8 +93,6 @@ def create_subdomain(email_input, password_input, hostname, ip_address ,show_bro
             new_name = input("[*] Insert subdomain name: \n")
 
         source = choose_domain(driver, new_name, ip_address )
-
-    time.sleep(1000)
     print("[*] The task has been completed successfully.")
     print(f"[*] Your domain name is: {hostname}.ddns.net")
 
