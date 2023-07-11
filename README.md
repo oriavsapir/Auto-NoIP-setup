@@ -17,6 +17,7 @@ The script performs the following steps:
 1. Creates a fake email.
 2. Signs up for No-IP using the fake email.
 3. Activates the No-IP account using the received email.
+4. Register a new domain name.
 
 ## Requirements
 
@@ -46,8 +47,21 @@ options:
   --show-browser                        | show browser    
 </pre>
 
+## P.O.C
+<pre>
+   python .\autonoip.py --password mypas.... --IP 192.168.0.1 --subdomain nice-name       
+Temporary email: 7olmvr81...@kz..v.com
+[*] Strating to active you mail account...
+[*] Your account is active.
+[*] The task has been completed successfully.
+[*] Your domain name is: nice-name.ddns.net
+[*] You can log in here and access your account at this link: https://www.noip.com/login, using your credentials.
+
+</pre>
+![image](https://github.com/oriavsapir/Auto-NoIP-setup/assets/85383966/00c5f811-2a77-4475-a9a0-0d25da81b5bc)
+
 ### note:
-Every 30 days, you need to log in to this account and "activate" this script. Otherwise, the domain will be deactivated.  
+Every 30 days, you need to log in to this account and "Confirm" your domain name. Otherwise, the domain will be deactivated.  
 So keep your Creds.
 # Disclaimer:
 
