@@ -1,11 +1,12 @@
 import re
 import time
-import requests
+from requests import get
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import argparse
+
 
 def sign_in(username, password, show_browser):
     if show_browser:
@@ -34,6 +35,7 @@ def sign_in(username, password, show_browser):
     # Close the WebDriver
     driver.quit()
 
+
 def choose_domain(driver, hostname, ip_address):
     driver.get("https://my.noip.com/dynamic-dns")
 
@@ -59,7 +61,8 @@ def choose_domain(driver, hostname, ip_address):
     source = element.get_attribute("outerHTML")
     return source
 
-def create_subdomain(email_input, password_input, hostname, ip_address ,show_browser):
+
+def create_subdomain(email_input, password_input, hostname, ip_address, show_browser):
     if show_browser:
         # Set up Chrome WebDriver
         driver = webdriver.Chrome()
@@ -83,7 +86,7 @@ def create_subdomain(email_input, password_input, hostname, ip_address ,show_bro
     time.sleep(3)
     webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()
     # Wait for the dynamic DNS page to load
-    source = choose_domain( driver, hostname, ip_address)
+    source = choose_domain(driver, hostname, ip_address)
 
     while "That name is already taken" in source:
         print("[*] That name is already taken")
@@ -92,16 +95,17 @@ def create_subdomain(email_input, password_input, hostname, ip_address ,show_bro
             print("Subdomain name must be at least 2 characters long. Please try again.")
             new_name = input("[*] Insert subdomain name: \n")
 
-        source = choose_domain(driver, new_name, ip_address )
+        source = choose_domain(driver, new_name, ip_address)
 
     print("[*] The task has been completed successfully.")
     print(f"[*] Your domain name is: {hostname}.ddns.net")
 
-    print("[*] You can log in here and access your account at this link: https://www.noip.com/login, using your credentials.")
+    print(
+        "[*] You can log in here and access your account at this link: https://www.noip.com/login, using your credentials.")
 
 
 def generate_temporary_email():
-    response = requests.get('https://www.1secmail.com/api/v1/?action=genRandomMailbox')
+    response = get('https://www.1secmail.com/api/v1/?action=genRandomMailbox')
     if response.status_code == 200:
         return response.text.strip('[]"')
     return None
@@ -112,7 +116,7 @@ def get_activation_email(email):
     url = f'https://www.1secmail.com/api/v1/?action=getMessages&login={email.split("@")[0]}&domain={email.split("@")[1]}'
     start_time = time.time()
     while time.time() - start_time < 60:
-        response = requests.get(url)
+        response = get(url)
         data = response.json()
 
         if data:
@@ -129,12 +133,12 @@ def get_activation_email(email):
         exit(1)
 
     email_url = f'https://www.1secmail.com/api/v1/?action=readMessage&login={email.split("@")[0]}&domain={email.split("@")[1]}&id={email_id}'
-    response = requests.get(email_url)
+    response = get(email_url)
     messages = response.json()
     link_matches = re.findall(r'<a\s+href="(.*?)"', messages['body'], re.IGNORECASE)
 
     if len(link_matches) >= 2:
-        check_activation = requests.get(link_matches[1]).text
+        check_activation = get(link_matches[1]).text
         if "Your account is now active!" in check_activation:
             print("[*] Your account is active.")
     else:
@@ -146,8 +150,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--password", help="password (at least 6 characters)")
     parser.add_argument("--IP", help="IP address")
-    parser.add_argument("-sb","--subdomain", help="subdomain name (up to 19 characters). "
-                                                  "This should be globally unique. If it is not unique, you'll need to choose another domain name.")
+    parser.add_argument("-sb", "--subdomain", help="subdomain name (up to 19 characters). "
+                                                   "This should be globally unique. If it is not unique, you'll need to choose another domain name.")
     parser.add_argument("--show-browser", action="store_true", help="show browser")
 
     args = parser.parse_args()
