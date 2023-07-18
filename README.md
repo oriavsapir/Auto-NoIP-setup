@@ -26,7 +26,8 @@ The script performs the following steps:
 - Selenium library: Install it by running `pip install selenium`
 
 ## Usage
-
+download and run the exe file from the [Releases](https://github.com/oriavsapir/Auto-NoIP-setup/releases) - Can run on Linux and Windows.  
+OR  
 1. Clone the repository: `git clone https://github.com/oriavsapir/Auto-NoIP-setup.git`
 2. Install the required dependencies.
 3. Run the program: ```python autonoip.py``` and nsert the input one by one.
